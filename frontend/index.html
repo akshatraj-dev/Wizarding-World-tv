@@ -1,0 +1,314 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wizarding World TV</title>
+<style>
+:root {
+  --gold: #d6b66c;
+  --bg: #100e19;
+  --panel: #201b2c;
+  --text: #f6f0e5;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Georgia, serif;
+  background: var(--bg);
+  color: var(--text);
+}
+header {
+  background: #171323;
+  padding: 22px 7%;
+  border-bottom: 1px solid #66502e;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+.logo { color: var(--gold); font-size: 25px; font-weight: bold; }
+nav a {
+  color: white; text-decoration: none;
+  margin: 0 9px; font-size: 14px;
+}
+nav a:hover { color: var(--gold); }
+.hero {
+  text-align: center;
+  padding: 95px 20px;
+  background:
+  linear-gradient(#100e1980,#100e19e8),
+  url("https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1600");
+  background-size: cover;
+  background-position: center;
+}
+.hero h1 { font-size: clamp(38px,7vw,65px); color: var(--gold); margin: 0 0 15px; }
+.hero p { font-size: 17px; }
+.search {
+  width: min(550px,90%);
+  padding: 15px;
+  margin-top: 25px;
+  border-radius: 9px;
+  border: 1px solid var(--gold);
+  background: #211c2d;
+  color: white;
+  font-size: 16px;
+}
+main { max-width: 1200px; margin: auto; padding: 35px 20px; }
+h2 { color: var(--gold); }
+.filters {
+  display: flex; gap: 10px; flex-wrap: wrap;
+  margin: 20px 0;
+}
+.filters button {
+  background: #292338;
+  border: 1px solid #78633e;
+  padding: 10px 17px;
+  color: white;
+  border-radius: 25px;
+  cursor: pointer;
+}
+.filters button.active, .filters button:hover {
+  background: var(--gold); color: #171323;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(230px,1fr));
+  gap: 20px;
+}
+.card {
+  background: var(--panel);
+  border: 1px solid #40364b;
+  padding: 23px;
+  border-radius: 13px;
+  transition: .2s;
+}
+.card:hover {
+  transform: translateY(-4px);
+  border-color: var(--gold);
+}
+.channel-logo {
+  width: 65px; height: 65px;
+  border-radius: 12px;
+  background: #30283d;
+  color: var(--gold);
+  display: grid;
+  place-items: center;
+  font-size: 21px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+.card h3 { margin: 8px 0; }
+.tag { color: var(--gold); font-size: 12px; }
+.card p { color: #c8bfd0; font-size: 14px; line-height: 1.6; }
+.watch {
+  display: inline-block;
+  background: var(--gold);
+  color: #171323;
+  padding: 10px 15px;
+  border-radius: 7px;
+  text-decoration: none;
+  font-weight: bold;
+  margin-top: 8px;
+}
+.notice {
+  padding: 18px;
+  background: #241d30;
+  border-left: 3px solid var(--gold);
+  margin: 25px 0;
+  line-height: 1.6;
+  color: #ddd3e5;
+}
+footer {
+  background: #171323;
+  text-align: center;
+  padding: 30px;
+  color: #aaa;
+  font-size: 13px;
+  margin-top: 40px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">⚡ WIZARDING WORLD TV</div>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#channels">TV Channels</a>
+    <a href="#channels">Streaming</a>
+    <a href="#about">About</a>
+  </nav>
+</header>
+
+<section class="hero" id="home">
+  <h1>Welcome to the Wizarding World</h1>
+  <p>Discover magical movies, television networks and streaming platforms.</p>
+  <input class="search" id="search"
+    placeholder="Search channels and platforms..."
+    oninput="render()">
+</section>
+
+<main id="channels">
+  <h2>✦ Explore the Directory</h2>
+  <p>Find broadcasters and streaming services around the world.</p>
+
+  <div class="filters">
+    <button class="active" onclick="filter('All',this)">All</button>
+    <button onclick="filter('Streaming',this)">Streaming</button>
+    <button onclick="filter('TV Network',this)">TV Networks</button>
+    <button onclick="filter('India',this)">India</button>
+    <button onclick="filter('International',this)">International</button>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="notice">
+    <strong>Important viewing information:</strong>
+    Streaming rights differ by country and change over time.
+    A platform's presence here does not guarantee that every
+    Harry Potter or Fantastic Beasts title is currently available.
+    Check its catalogue before subscribing.
+  </div>
+
+  <h2 id="about">About Wizarding World TV</h2>
+  <p>
+    Wizarding World TV is an independent fan-made directory
+    helping fans discover legitimate places to watch
+    Harry Potter and Fantastic Beasts content.
+  </p>
+</main>
+
+<footer>
+  <p>⚡ Wizarding World TV</p>
+  <p>Independent fan project. Not affiliated with Warner Bros.
+  Discovery or the official Wizarding World.</p>
+  <p>All trademarks and brand names belong to their respective owners.</p>
+</footer>
+
+<script>
+const channels = [
+  {
+    name:"JioHotstar",
+    logo:"JH",
+    category:"Streaming",
+    region:"India",
+    description:"Indian streaming platform. Check its catalogue for Harry Potter movies.",
+    url:"https://www.hotstar.com/in"
+  },
+  {
+    name:"Amazon Prime Video",
+    logo:"PV",
+    category:"Streaming",
+    region:"India",
+    description:"Streaming and digital video service. Check availability of individual titles.",
+    url:"https://www.primevideo.com/"
+  },
+  {
+    name:"Netflix",
+    logo:"N",
+    category:"Streaming",
+    region:"International",
+    description:"International streaming platform. Wizarding World titles vary by country.",
+    url:"https://www.netflix.com/"
+  },
+  {
+    name:"HBO Max",
+    logo:"HBO",
+    category:"Streaming",
+    region:"International",
+    description:"A major streaming destination for Harry Potter and Fantastic Beasts in supported territories.",
+    url:"https://www.hbomax.com/"
+  },
+  {
+    name:"Peacock",
+    logo:"P",
+    category:"Streaming",
+    region:"International",
+    description:"US streaming platform featuring Harry Potter film collections.",
+    url:"https://www.peacocktv.com/"
+  },
+  {
+    name:"ITVX",
+    logo:"ITV",
+    category:"Streaming",
+    region:"International",
+    description:"UK streaming service. Check its current film catalogue.",
+    url:"https://www.itv.com/"
+  },
+  {
+    name:"TBS",
+    logo:"TBS",
+    category:"TV Network",
+    region:"International",
+    description:"US television network that has previously aired Wizarding World specials.",
+    url:"https://www.tbs.com/"
+  },
+  {
+    name:"Cartoon Network",
+    logo:"CN",
+    category:"TV Network",
+    region:"International",
+    description:"Has previously aired Wizarding World promotional programming and specials.",
+    url:"https://www.cartoonnetwork.com/"
+  },
+  {
+    name:"HBO",
+    logo:"HBO",
+    category:"TV Network",
+    region:"International",
+    description:"Television network associated with the Harry Potter television adaptation.",
+    url:"https://www.hbo.com/"
+  }
+];
+
+let selected = "All";
+
+function filter(category,button) {
+  selected = category;
+  document.querySelectorAll(".filters button")
+    .forEach(b=>b.classList.remove("active"));
+  button.classList.add("active");
+  render();
+}
+
+function render() {
+  const query = document.getElementById("search")
+    .value.toLowerCase();
+
+  const results = channels.filter(c => {
+    const matchesSearch =
+      (c.name+" "+c.description+" "+c.region)
+      .toLowerCase().includes(query);
+
+    const matchesCategory =
+      selected === "All" ||
+      c.category === selected ||
+      (selected === "India" && c.region === "India") ||
+      (selected === "International" && c.region === "International");
+
+    return matchesSearch && matchesCategory;
+  });
+
+  document.getElementById("grid").innerHTML =
+    results.length ? results.map(c=>`
+      <article class="card">
+        <div class="channel-logo">${c.logo}</div>
+        <span class="tag">${c.category} · ${c.region}</span>
+        <h3>${c.name}</h3>
+        <p>${c.description}</p>
+        <a class="watch" href="${c.url}"
+           target="_blank" rel="noopener noreferrer">
+           Visit Official Website ↗
+        </a>
+      </article>
+    `).join("") :
+    "<p>No channels found. Try another search.</p>";
+}
+
+render();
+</script>
+</body>
+</html>
